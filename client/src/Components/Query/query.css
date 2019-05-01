@@ -1,0 +1,12 @@
+.query-module {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    justify-content: space-between;
+}
+
+.query-button {
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+}

@@ -1,0 +1,44 @@
+<script>
+
+
+// write a function that takes 2 arrays of ints, and only returns the ints that are unique across both
+
+var array1 = [1, 2, 3]
+var array2 = [3, 4, 5]
+// [1, 2, 4, 5]
+
+// [1,2,2,3]
+// [3,4,4,5]
+
+// [1,5]
+
+function findUnique(array1, array2){
+
+    var obj = {};
+    var finalArray = [];
+
+    var newArray = array1.concat(array2)
+
+    for (let i=0; i<newArray.length; i++) {
+        if(obj[newArray[i]] === undefined) {
+            obj[newArray[i]] = 0
+        }
+        else {
+            obj[newArray[i]]++
+        }
+    }
+    console.log(obj)
+
+    for (let prop in obj) {
+        if(obj[prop] === 0) {
+            finalArray.push(prop)
+        }
+    }
+
+    return finalArray
+
+}
+
+console.log(findUnique(array1, array2))
+
+</script>
