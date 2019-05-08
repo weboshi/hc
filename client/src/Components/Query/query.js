@@ -24,23 +24,40 @@ const styles = theme => ({
     width: 200,
   },
   input1: {
-      height: 40,
+      height: 20,
       width: 60,
+      padding: 10,
   }
 });
 
 
 class OutlinedTextFields extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
 
-  handleChange = name => event => {
+    }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleClick = this.handleClick.bind(this)
+  }
+
+  handleChange = (e) => {
     this.setState({
-      [name]: event.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
+  handleClick = () => {
+    const {lowerBound, upperBound} = this.state
+    console.log(this.state.lowerBound)
+    console.log(lowerBound)
+    this.props.onQuery(lowerBound, upperBound)
+  }
+
   render() {
     const { classes } = this.props;
-    if (this.props.canClear === true ) {
+    if (this.props.canClear == true ) {
         return (
             <div className='query-module'>
                 <Button label="View Graph of Quotes" onClick={this.props.onClick}/>
@@ -49,8 +66,8 @@ class OutlinedTextFields extends React.Component {
                   id="outlined-name"
                   label="Min USD"
                   className={classes.textField}
-                  value={this.props.lowerBound}
-                  onChange={this.props.onChange}
+                  value={this.state.lowerBound}
+                  onChange={this.handleChange}
                   margin="normal"
                   variant="outlined"
                   name='lowerBound'
@@ -63,8 +80,8 @@ class OutlinedTextFields extends React.Component {
                   id="outlined-name"
                   label="Max USD"
                   className={classes.textField}
-                  value={this.props.upperBound}
-                  onChange={this.props.onChange}
+                  value={this.state.upperBound}
+                  onChange={this.handleChange}
                   margin="normal"
                   variant="outlined"
                   name='upperBound'
@@ -73,7 +90,7 @@ class OutlinedTextFields extends React.Component {
                     classes: { input: classes.input1}
                   }}        /> 
                 <div className='query-button'>
-                    <Button label='filter by quote price' onClick={this.props.onQuery}/>
+                    <Button label='filter by quote price' onClick={this.handleClick}/>
                     <Button label="clear" onClick={this.props.onClear}/>
                 </div>
               </form>
@@ -90,8 +107,8 @@ class OutlinedTextFields extends React.Component {
                   id="outlined-name"
                   label="Min USD"
                   className={classes.textField}
-                  value={this.props.lowerBound}
-                  onChange={this.props.onChange}
+                  value={this.state.lowerBound}
+                  onChange={this.handleChange}
                   margin="normal"
                   variant="outlined"
                   name='lowerBound'
@@ -104,8 +121,8 @@ class OutlinedTextFields extends React.Component {
                   id="outlined-name"
                   label="Max USD"
                   className={classes.textField}
-                  value={this.props.upperBound}
-                  onChange={this.props.onChange}
+                  value={this.state.upperBound}
+                  onChange={this.handleChange}
                   margin="normal"
                   variant="outlined"
                   name='upperBound'
@@ -114,7 +131,7 @@ class OutlinedTextFields extends React.Component {
                     classes: { input: classes.input1}
                   }}        /> 
                 <div className='query-button'>
-                    <Button label='filter by quote price' onClick={this.props.onQuery}/>
+                    <Button label='filter by quote price' onClick={this.handleClick}/>
                 </div>
               </form>
             </div> 

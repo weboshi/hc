@@ -33,3 +33,9 @@
     height: 150px;
 
 }
+
+.loading {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

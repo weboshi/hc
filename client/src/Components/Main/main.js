@@ -12,6 +12,7 @@ export class CryptoData extends Component {
         super(props);
         this.state = {
             loading: 1,
+            filtered: '',
         }
 
         this.selectAllCurrencies = this.selectAllCurrencies.bind(this)
@@ -20,6 +21,7 @@ export class CryptoData extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.filterByPrice = this.filterByPrice.bind(this)
         this.viewGraph = this.viewGraph.bind(this)
+        this.sortByColumn = this.sortByColumn.bind(this)
 
     }
 
@@ -48,6 +50,7 @@ export class CryptoData extends Component {
         axios.get('/api/crypto/getCrypto')
         .then(res => {
             this.setState({
+                currentData: res.data.data,
                 cryptoData: res.data.data,
                 viewAll: 1,
                 loading: '',
@@ -57,12 +60,16 @@ export class CryptoData extends Component {
     }
 
     viewTopCurrencies() {
+        console.log('boop')
         this.setState({
+            currentData: this.state.cryptoData,
             homeView: '',
             viewAll: 1,
             currentCurrency: null,
             viewQuery: '',
             viewGraph: '',
+            queryTable: '',
+            filtered: '',
         })
     }
 
@@ -76,39 +83,38 @@ export class CryptoData extends Component {
         this.selectSingleCurrency();
     }
 
-    filterByPrice = (e) => {
-        let lowerBound = this.state.lowerBound
-        let upperBound = this.state.upperBound
+    filterByPrice = (lower, upper) => {
+        let lowerBound = lower
+        let upperBound = upper
+        const cryptoArray = this.state.cryptoData
 
         if(lowerBound === undefined || upperBound === undefined){
-            e.preventDefault()
             return
         }
 
-        const cryptoArray = this.state.cryptoData
-
         const sortPrice = (currObj) => {
-            console.log(currObj)
-
             let value = currObj.quote.USD.price
             if(value > lowerBound && value < upperBound) {
                 return currObj
             }
         }
 
-        const filteredArray = cryptoArray.filter(sortPrice).sort((a, b) => parseFloat(a.quote.USD.price) - parseFloat(b.quote.USD.price));
+        const filteredArray = cryptoArray.filter(sortPrice)
 
         this.setState({
+            currentData: filteredArray,
             queryTable: filteredArray,
             viewQuery: 1,
             viewAll: '',
             homeView: '',
+            filtered: 1,
         })
 
     }
 
+    //View Graph Button Function
     viewGraph = () => {
-        let cryptoArray = this.state.cryptoData
+        let cryptoArray = this.state.currentData
         let keys = [];
         let quotes = [];
 
@@ -136,10 +142,158 @@ export class CryptoData extends Component {
               graphData: data,
               viewGraph: 1,
               viewAll: '',
+              homeView: '',
+              viewQuery: '',
           })
     }
 
+    //Sort Table by Respective Column Clicked
+    sortByColumn = (category) => {
+        const cryptoArray = this.state.currentData
+        if (category === 'cmc_rank'){
+            if(this.state.rankFiltered === 0){
+                const sortedArray = cryptoArray.sort((a, b) => {
+                    return b.cmc_rank - a.cmc_rank})
+        
+                this.setState({
+                    currentData: sortedArray,
+                    viewQuery: '',
+                    viewAll: 1,
+                    homeView: '',
+                    filtered: 1,
+                    rankFiltered: 1,
+                })
 
+            }
+        else {
+            const sortedArray = cryptoArray.sort((a, b) => {
+                return a.cmc_rank - b.cmc_rank})
+    
+            this.setState({
+                currentData: sortedArray,
+                viewQuery: '',
+                viewAll: 1,
+                homeView: '',
+                filtered: 1,
+                rankFiltered: 0,
+            })
+        }
+        }
+        else if(category === 'name'){
+            if(this.state.nameFiltered === 1){
+                const sortedArray = cryptoArray.sort((a, b) => b.name.localeCompare(a.name))
+    
+            this.setState({
+                currentData: sortedArray,
+                viewQuery: '',
+                viewAll: 1,
+                homeView: '',
+                filtered: 1,
+                nameFiltered: 1,
+            })
+            }
+            else {
+            const sortedArray = cryptoArray.sort((a, b) => a.name.localeCompare(b.name))
+    
+            this.setState({
+                currentData: sortedArray,
+                viewQuery: '',
+                viewAll: 1,
+                homeView: '',
+                filtered: 1,
+                nameFiltered: 1,
+            })
+
+        }
+        }
+        else if (category === 'quote.USD.price'){
+            if (this.state.quoteFiltered === 1) {
+                const sortedArray = cryptoArray.sort((a, b) => {
+                    console.log(b.quote.USD.price - a.quote.USD.price)
+                    return b.quote.USD.price - a.quote.USD.price})
+        
+                this.setState({
+                    currentData: sortedArray,
+                    viewQuery: '',
+                    viewAll: 1,
+                    homeView: '',
+                    filtered: 1,
+                    quoteFiltered: '',
+                })
+            }
+            else {
+            const sortedArray = cryptoArray.sort((a, b) => {
+                console.log(a.quote.USD.price - b.quote.USD.price)
+                return a.quote.USD.price - b.quote.USD.price})
+    
+            this.setState({
+                currentData: sortedArray,
+                viewQuery: '',
+                viewAll: 1,
+                homeView: '',
+                filtered: 1,
+                quoteFiltered: 1,
+            })
+        }
+
+        }
+        else if (category === 'symbol'){
+            if (this.state.symbolFiltered === 1){
+                const sortedArray = cryptoArray.sort((a, b) => b.symbol.localeCompare(a.symbol))
+    
+                this.setState({
+                    currentData: sortedArray,
+                    viewQuery: '',
+                    viewAll: 1,
+                    homeView: '',
+                    filtered: 1,
+                    symbolFiltered: '',
+                })
+            }
+        else {
+            const sortedArray = cryptoArray.sort((a, b) => a.symbol.localeCompare(b.symbol))
+    
+            this.setState({
+                currentData: sortedArray,
+                viewQuery: '',
+                viewAll: 1,
+                homeView: '',
+                filtered: 1,
+                symbolFiltered: 1,
+            })
+
+        }
+        }
+        else if (category === 'circulating_supply'){
+            if (this.state.supplyFiltered === 1){
+                const sortedArray = cryptoArray.sort((a, b) => {
+                    return b.circulating_supply - a.circulating_supply})
+        
+                this.setState({
+                    currentData: sortedArray,
+                    viewQuery: '',
+                    viewAll: 1,
+                    homeView: '',
+                    filtered: 1,
+                    supplyFiltered: '',
+                })
+
+            }
+        else {
+            const sortedArray = cryptoArray.sort((a, b) => {
+                return a.circulating_supply - b.circulating_supply})
+    
+            this.setState({
+                currentData: sortedArray,
+                viewQuery: '',
+                viewAll: 1,
+                homeView: '',
+                filtered: 1,
+                supplyFiltered: 1,
+            })
+        }
+        }
+    }
 
     render(){
         return(
@@ -158,21 +312,22 @@ export class CryptoData extends Component {
                             lowerBound={this.state.lowerBound} 
                             upperBound={this.state.upperBound}
                             onQuery={this.filterByPrice}
-                            canClear={false}/>
+                            canClear={this.state.filtered}
+                            onClear={this.viewTopCurrencies}/>
 
-                        <Table data={this.state.cryptoData}/>
+                        <Table data={this.state.currentData} onSort={this.sortByColumn}/>
                     </div>}
             {/* Queried USD View */}
                 {this.state.viewQuery &&
                     <div className='query-table'>
-                        <Query 
-                            onChange={this.handleChange} 
+                        <Query
+                            onClick={this.viewGraph} 
                             lowerBound={this.state.lowerBound} 
                             upperBound={this.state.upperBound}
                             onQuery={this.filterByPrice}
                             onClear={this.viewTopCurrencies}
-                            canClear={true}/>
-                        <Table data={this.state.queryTable}/>
+                            canClear={this.state.filtered}/>
+                        <Table data={this.state.queryTable} onSort={this.sortByColumn}/>
                     </div>}
             {/* Graph View of Currency Quotes */}
                 {this.state.viewGraph &&
@@ -180,8 +335,6 @@ export class CryptoData extends Component {
                         <Button onClick={this.viewTopCurrencies} label="View Table" />
                         <Graph data={this.state.graphData}/>
                     </div>}
-            {/* Single Currency Search View */}
-                {this.state.currentCurrency && <Table data={this.state.currentCurrency}/>}
             </div>
         )
     }

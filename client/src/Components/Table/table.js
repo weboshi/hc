@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { defaultProps } from 'recompose';
+import './table.css';
 
 const styles = theme => ({
   root: {
@@ -20,26 +21,35 @@ const styles = theme => ({
   },
 });
 
-function SimpleTable(props) {
-  const { classes } = props;
-  const dataObject = Object.keys(Object.values(props)[0])[0]
+class SimpleTable extends React.Component {
+  constructor(props){
+    super(props)
+    this.onClick = this.onClick.bind(this)
+  }
 
-  return (
-    Array.isArray(props.data) ?
-    
+  onClick = (e) => {
+    let attr = e.target.getAttribute('name')
+    this.props.onSort(attr)
+  }
+
+render(){
+  const { classes } = this.props;
+
+
+  return (   
     <Paper className={classes.root}>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell>Rank</TableCell>
-            <TableCell align="center">Cryptocurrency</TableCell>
-            <TableCell align="center">Symbol</TableCell>
-            <TableCell align="center">USD Price</TableCell>
-            <TableCell align="center">Supply</TableCell>
+            <TableCell align="center" name="cmc_rank" onClick={this.onClick}>Rank</TableCell>
+            <TableCell align="center" name='name' onClick={this.onClick}>Cryptocurrency</TableCell>
+            <TableCell align="center" name="symbol" onClick={this.onClick}>Symbol</TableCell>
+            <TableCell align="center" name="quote.USD.price" onClick={this.onClick}>USD Price</TableCell>
+            <TableCell align="center" name="circulating_supply" onClick={this.onClick}>Supply</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.data.map(row => (
+          {this.props.data.map(row => (
             <TableRow key={row.id}>
               <TableCell component="th" scope="row">
                 {row.cmc_rank}
@@ -53,34 +63,8 @@ function SimpleTable(props) {
         </TableBody>
       </Table>
     </Paper>
-  
-    :
-  
-    <Paper className={classes.root}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Rank</TableCell>
-            <TableCell align="center">Cryptocurrency</TableCell>
-            <TableCell align="center">Symbol</TableCell>
-            <TableCell align="center">Logo</TableCell>
-            <TableCell align="center">Description</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                {dataObject}
-              </TableCell>
-              <TableCell align="center">{props.data[dataObject].name}</TableCell>
-              <TableCell align="center">{props.data[dataObject].symbol}</TableCell>
-              <TableCell align="center"><img src={props.data[dataObject].logo}/></TableCell>
-              <TableCell align="center">{props.data[dataObject].description}</TableCell>
-            </TableRow>
-        </TableBody>
-      </Table>
-    </Paper>
-  );
+  )
+  }
 }
 
 SimpleTable.propTypes = {
