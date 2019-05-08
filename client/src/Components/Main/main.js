@@ -160,7 +160,6 @@ export class CryptoData extends Component {
                     viewQuery: '',
                     viewAll: 1,
                     homeView: '',
-                    filtered: 1,
                     rankFiltered: 1,
                 })
 
@@ -174,7 +173,6 @@ export class CryptoData extends Component {
                 viewQuery: '',
                 viewAll: 1,
                 homeView: '',
-                filtered: 1,
                 rankFiltered: 0,
             })
         }
@@ -188,7 +186,6 @@ export class CryptoData extends Component {
                 viewQuery: '',
                 viewAll: 1,
                 homeView: '',
-                filtered: 1,
                 nameFiltered: 1,
             })
             }
@@ -200,7 +197,6 @@ export class CryptoData extends Component {
                 viewQuery: '',
                 viewAll: 1,
                 homeView: '',
-                filtered: 1,
                 nameFiltered: 1,
             })
 
@@ -217,7 +213,6 @@ export class CryptoData extends Component {
                     viewQuery: '',
                     viewAll: 1,
                     homeView: '',
-                    filtered: 1,
                     quoteFiltered: '',
                 })
             }
@@ -231,7 +226,6 @@ export class CryptoData extends Component {
                 viewQuery: '',
                 viewAll: 1,
                 homeView: '',
-                filtered: 1,
                 quoteFiltered: 1,
             })
         }
@@ -246,7 +240,6 @@ export class CryptoData extends Component {
                     viewQuery: '',
                     viewAll: 1,
                     homeView: '',
-                    filtered: 1,
                     symbolFiltered: '',
                 })
             }
@@ -258,7 +251,6 @@ export class CryptoData extends Component {
                 viewQuery: '',
                 viewAll: 1,
                 homeView: '',
-                filtered: 1,
                 symbolFiltered: 1,
             })
 
@@ -274,7 +266,6 @@ export class CryptoData extends Component {
                     viewQuery: '',
                     viewAll: 1,
                     homeView: '',
-                    filtered: 1,
                     supplyFiltered: '',
                 })
 
@@ -288,7 +279,6 @@ export class CryptoData extends Component {
                 viewQuery: '',
                 viewAll: 1,
                 homeView: '',
-                filtered: 1,
                 supplyFiltered: 1,
             })
         }
